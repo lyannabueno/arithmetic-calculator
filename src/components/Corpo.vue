@@ -4,6 +4,7 @@ import { reactive } from 'vue';
 const estate = reactive({
     number1: '',
     number2: '',
+    arithmeticOperations: 'add',
 
     operations: {
         add: (a, b) => a + b,
@@ -18,7 +19,11 @@ const estate = reactive({
 const calculate = () => {
     const { number1, number2, arithmeticOperations } = estate
 
-    estate.result = estate.operations[arithmeticOperations](parseFloat(number1), parseFloat(number2))
+    if (number1 !== '' && number2 !== '') {
+        estate.result = estate.operations[arithmeticOperations](parseFloat(number1), parseFloat(number2))
+    } else {
+        estate.result = ''
+    }
 }
 </script>
 
@@ -30,25 +35,17 @@ const calculate = () => {
             <div class="calculator">
                 <input v-model="estate.number1" type="number" placeholder="1º número" class="form-control border-color" required @input="calculate">
                 <input v-model="estate.number2" type="number" placeholder="2º número" class="form-control border-color mt-5 mb-5" required @input="calculate">
-                <h3> Resultado...{{ estate.result }} </h3>
+                <h6> Resultado... {{ estate.result }} </h6>
             </div>
 
-            <select v-model="estate.arithmeticOperations" class="choices" @change="calculate">
-                <button type="button" class="btn btn-outline-dark border-color mt-1" value='add'">
-                    <i class=" fa fa-plus"></i>
-                </button>
+            <select v-model="estate.arithmeticOperations" class="form-control choices" @change="calculate">
+                <option value='add'>+</option>
 
-                <button type="button" class="btn btn-outline-dark border-color mt-3 mb-3" value='subtract'">
-                    <i class=" fa fa-minus"></i>
-                </button>
+                <option value='subtract'>-</option>
 
-                <button type="button" class="btn btn-outline-dark border-color mb-3" value='multiply'">
-                    <i class=" fa fa-x"></i>
-                </button>
+                <option value='multiply'>x</option>
 
-                <button type="button" class="btn btn-outline-dark border-color" value='divide'">
-                    <i class=" fa fa-divide"></i>
-                </button>
+                <option value='divide'>÷</option>
             </select>
         </div>
     </div>
@@ -57,9 +54,18 @@ const calculate = () => {
 <style scoped>
 h1 {
     padding-bottom: 50px;
+    font-family: "Roboto Slab", serif;
+    font-weight: 300;
+
 }
 
-.form-control {
+h6 {
+    font-family: "Roboto Slab", serif;
+    font-weight: 300;
+    color: gray;
+}
+
+input .form-control {
     width: 15vh;
 }
 
@@ -68,10 +74,16 @@ h1 {
     justify-content: center;
 }
 
-.choices button {
+.choices {
     display: block;
-    margin-left: auto;
     width: 5vh;
+    text-align: center;
+    margin-left: auto;
+    height: 5vh;
+}
+
+option {
+    font-size: 20px;
 }
 
 i {
